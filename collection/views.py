@@ -10,3 +10,5 @@ class DiecastModelViewSet(viewsets.ModelViewSet):
     queryset = Diecast_Model.objects.all()
     serializer_class = DiecastModelSerializer
     
+
+    
