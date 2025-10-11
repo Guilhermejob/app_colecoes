@@ -1,32 +1,18 @@
 from django.db import models
+from .Diecast_Model import Diecast_Model
+from .Car_Brand import Car_Brand
+from .Car_model import Car_model
+from .Diecast_Brand import Diecast_Brand
 
-class Brand (models.Model):
-    """
-    Model que representa a marca da fabricante da miniatura
-    """
-    name = models.CharField(max_length=100, unique=True, blank=False, null=False) # Ex: Nissan, Ford, etc
-    country = models.CharField(max_length=100, blank=True, null=True)
-
-    def __str__(self):
-        return self.name
-
-class Diecast_Model(models.Model):
-    """
-    Model que representa o nome do modelo da miniatura, para fins de padronização
-    """
-    name = models.CharField(max_length=100, unique=True, blank=False, null=False) # Ex: 350z, Mustang, etc
-    
-    def __str__(self):
-        return self.name
-    
 class Diecast(models.Model):
     """
     Model que representa a miniatura com todos os detalhes
     """
     
-    name = models.ForeignKey(Diecast_Model, on_delete=models.CASCADE, related_name='itens') # Nome do modelo da miniatura
-    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='itens') # Marca da fabricante da miniatura
-    car_brand = models.CharField(max_length=100, blank=True, null=True) # Marca do carro real
+    name = models.ForeignKey(Diecast_Model, on_delete=models.CASCADE, related_name='diecast_name') # Nome do modelo da miniatura
+    brand = models.ForeignKey(Diecast_Brand, on_delete=models.CASCADE, related_name='diecast_brand') # Marca da fabricante da miniatura
+    car_brand = models.ForeignKey(Car_Brand, on_delete=models.CASCADE, related_name='car_brand') # Marca do carro real
+    car_model = models.ForeignKey(Car_model, on_delete=models.CASCADE, related_name='car_model') # Modelo do carro real
     series = models.CharField(max_length=100, blank=True, null=True) # Ex: Car Culture, Mainline, RLC etc
     sub_series = models.CharField(max_length=100, blank=True, null=True) # Ex: Fast & Furious, Star Wars, etc
     release_year = models.IntegerField(blank=True, null=True) # Ano de lançamento da miniatura
@@ -42,4 +28,3 @@ class Diecast(models.Model):
     
     def __str__(self):
         return f"{self.brand.name} {self.name} ({self.scale})"
-
