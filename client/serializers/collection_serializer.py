@@ -5,10 +5,15 @@ from app_collection.serializers.Diecast import DiecastSerializer
 from client.serializers.client_serializer import ClientSerializer
 
 class CollectionItemSerializer(serializers.ModelSerializer):
-    
-    diecast = DiecastSerializer(read_only=True)
+    # Retorna apenas o nome da coleção
+    collection = serializers.SlugRelatedField(
+        slug_field='name',
+        read_only=True
+    )
 
-    
+    # Retorna os detalhes completos da miniatura (usando o DiecastSerializer)
+    diecasts = DiecastSerializer(read_only=True)
+
     class Meta:
         model = DiecastCollectionItem
         fields = '__all__'

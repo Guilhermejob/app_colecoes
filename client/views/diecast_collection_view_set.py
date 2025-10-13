@@ -41,6 +41,6 @@ class CollectionViewSet(viewsets.ModelViewSet):
     serializer_class = CollectionSerializer
     
 class CollectionItemViewSet(viewsets.ModelViewSet):
-    queryset = DiecastCollectionItem.objects.all().select_related('collection', 'diecasts')
+    queryset = DiecastCollectionItem.objects.all().select_related("collection", "diecasts")
     serializer_class = CollectionItemSerializer
 
