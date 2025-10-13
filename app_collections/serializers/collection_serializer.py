@@ -3,20 +3,18 @@ from app_collections.models.diecast_collection import DiecastCollection
 from app_collections.models.diecast_collection_item import DiecastCollectionItem
 from diecasts.serializers.Diecast import DiecastSerializer
 from client.serializers.client_serializer import ClientSerializer
+from diecasts.models.Diecast import Diecast
 
 class CollectionItemSerializer(serializers.ModelSerializer):
-    # Retorna apenas o nome da coleção
-    collection = serializers.SlugRelatedField(
-        slug_field='name',
-        read_only=True
-    )
+    collection = serializers.PrimaryKeyRelatedField(queryset=DiecastCollection.objects.all())
+    diecasts = serializers.PrimaryKeyRelatedField(queryset=Diecast.objects.all())
 
-    # Retorna os detalhes completos da miniatura (usando o DiecastSerializer)
-    diecasts = DiecastSerializer(read_only=True)
+    diecast_details = DiecastSerializer(source='diecasts', read_only=True)
 
     class Meta:
         model = DiecastCollectionItem
-        fields = '__all__'
+        fields = ['id', 'collection', 'diecasts', 'diecast_details', 'created_at']
+
         
 class CollectionSerializer(serializers.ModelSerializer):
     client = ClientSerializer(read_only=True)
