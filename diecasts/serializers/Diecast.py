@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from app_collection.models import (
+from diecasts.models import (
     Diecast,
     Car_Brand,
     Diecast_Brand,
     Car_model,
     Diecast_Model,
 )
-from app_collection.utils import get_or_create_instance
+from diecasts.utils import get_or_create_instance
 
 
 class DiecastSerializer(serializers.ModelSerializer):

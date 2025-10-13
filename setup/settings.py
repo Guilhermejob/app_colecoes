@@ -48,8 +48,9 @@ INSTALLED_APPS = [
     'rest_framework',
     "corsheaders",
     
-    'app_collection',
+    'app_collections',
     'client',
+    'diecasts',
        
 ]
 

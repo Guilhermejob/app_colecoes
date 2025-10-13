@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app_collection.models.Diecast_Model import Diecast_Model
+from diecasts.models.Diecast_Model import Diecast_Model
 
 
 class DiecastModelSerializer(serializers.ModelSerializer):

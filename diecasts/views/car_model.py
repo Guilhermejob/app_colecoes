@@ -1,5 +1,5 @@
-from app_collection.models.Car_model import Car_model
-from app_collection.serializers.car_model import CarModelSerializer
+from diecasts.models.Car_model import Car_model
+from diecasts.serializers.car_model import CarModelSerializer
 from rest_framework import viewsets
 
 class CarModelViewSet(viewsets.ModelViewSet):

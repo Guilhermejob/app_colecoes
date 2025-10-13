@@ -1,5 +1,5 @@
 from django.db import models
-from app_collection.models.Diecast import Diecast
+from diecasts.models.Diecast import Diecast
 from .diecast_collection import DiecastCollection
 
 class DiecastCollectionItem(models.Model):

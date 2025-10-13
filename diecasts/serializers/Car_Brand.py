@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app_collection.models.Car_Brand import Car_Brand
+from diecasts.models.Car_Brand import Car_Brand
 
 
 class CarBrandSerializer(serializers.ModelSerializer):

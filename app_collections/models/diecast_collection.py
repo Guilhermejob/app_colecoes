@@ -1,5 +1,5 @@
 from django.db import models
-from .clients import Client
+from client.models.clients import Client
 from datetime import date
 
 class DiecastCollection(models.Model):

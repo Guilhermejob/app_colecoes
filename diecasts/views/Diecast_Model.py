@@ -1,5 +1,5 @@
-from app_collection.models import Diecast_Model
-from app_collection.serializers.Diecast_Model import DiecastModelSerializer
+from diecasts.models import Diecast_Model
+from diecasts.serializers.Diecast_Model import DiecastModelSerializer
 from rest_framework import viewsets
 
 class DiecastModelViewSet(viewsets.ModelViewSet):

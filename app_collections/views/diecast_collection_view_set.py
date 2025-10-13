@@ -1,10 +1,10 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from client.models.diecast_collection import DiecastCollection
-from client.models.diecast_collection_item import DiecastCollectionItem
-from app_collection.models.Diecast import Diecast
-from client.serializers.collection_serializer import CollectionSerializer, CollectionItemSerializer
+from app_collections.models.diecast_collection import DiecastCollection
+from app_collections.models.diecast_collection_item import DiecastCollectionItem
+from diecasts.models.Diecast import Diecast
+from app_collections.serializers.collection_serializer import CollectionSerializer, CollectionItemSerializer
 
 '''class DiecastCollectionViewSet(viewsets.ModelViewSet):
     queryset = DiecastCollection.objects.all()

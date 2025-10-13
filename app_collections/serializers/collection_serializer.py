@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from client.models.diecast_collection import DiecastCollection
-from client.models.diecast_collection_item import DiecastCollectionItem
-from app_collection.serializers.Diecast import DiecastSerializer
+from app_collections.models.diecast_collection import DiecastCollection
+from app_collections.models.diecast_collection_item import DiecastCollectionItem
+from diecasts.serializers.Diecast import DiecastSerializer
 from client.serializers.client_serializer import ClientSerializer
 
 class CollectionItemSerializer(serializers.ModelSerializer):
