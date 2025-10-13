@@ -6,35 +6,41 @@ from client.models.diecast_collection_item import DiecastCollectionItem
 from app_collection.models.Diecast import Diecast
 from client.serializers.collection_serializer import CollectionSerializer, CollectionItemSerializer
 
-class DiecastCollectionViewSet(viewsets.ModelViewSet):
+'''class DiecastCollectionViewSet(viewsets.ModelViewSet):
     queryset = DiecastCollection.objects.all()
     serializer_class = CollectionSerializer
-    
-    # Post /api/collection/{collection_id}/add_item/
-    @action(detail=True, methods=['post'], url_path='add_item')
-    def add_item(self, request, pk=None):
-        collection = self.get_object()
-        diecast_id = request.data.get('diecast_id')
-        
-        if not diecast_id:
-            return Response({"error": "diecast_id is required."}, status=status.HTTP_400_BAD_REQUEST)
-        
+
+    @action(detail=True, methods=["post"], url_path="add_item/(?P<diecast_id>[^/.]+)")
+    def add_item(self, request, pk=None, diecast_id=None):
+        """
+        Adiciona uma miniatura (Diecast) à coleção especificada.
+        Ex: POST /api/collections/{id_collection}/add_item/{id_diecast}/
+        """
         try:
+            collection = self.get_object()
             diecast = Diecast.objects.get(id=diecast_id)
+            collection.items.add(diecast)
+            return Response({
+                "message": f"Miniatura '{diecast}' adicionada à coleção '{collection.name}' com sucesso."
+            }, status=status.HTTP_200_OK)
         except Diecast.DoesNotExist:
-            return Response({"error": "Diecast not found."}, status=status.HTTP_404_NOT_FOUND)
-        
-        item, created = DiecastCollectionItem.objects.get_or_create(
-            collection=collection,
-            diecast=diecast,
-            defaults={'beginning_date': request.data.get('beginning_date')}
-        )
-        
-        serializer = CollectionItemSerializer(item)
-        return Response(serializer.data, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+            return Response({"error": "Diecast não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
     
 
 class DiecastCollectionsViewSet(viewsets.ModelViewSet):
     queryset = DiecastCollectionItem.objects.all()
     serializer_class = CollectionItemSerializer 
+    
+'''
+
+class CollectionViewSet(viewsets.ModelViewSet):
+    queryset = DiecastCollection.objects.all().select_related('owner')
+    serializer_class = CollectionSerializer
+    
+class CollectionItemViewSet(viewsets.ModelViewSet):
+    queryset = DiecastCollectionItem.objects.all().select_related('collection', 'diecasts')
+    serializer_class = CollectionItemSerializer
+
