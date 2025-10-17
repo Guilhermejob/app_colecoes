@@ -1,12 +1,13 @@
 from django.urls import path, include
 from rest_framework import routers
-from app_collections.views.diecast_collection_view_set import CollectionViewSet, CollectionItemViewSet
-from client.views.client_view_set import ClientViewSet
+from client.views.client_view_set import ClientViewSet, GetClientById
 
 
 router = routers.DefaultRouter()
-router.register(r'register_client', ClientViewSet, basename='register_client')
+router.register(r'client', ClientViewSet)
+
 
 urlpatterns = [
     path('', include(router.urls)),  # todas as rotas do router
+    path('/<int:id>/', GetClientById.as_view())
 ]
