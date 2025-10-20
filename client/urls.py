@@ -9,5 +9,5 @@ router.register(r'client', ClientViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),  # todas as rotas do router
-    path('/<int:id>/', GetClientById.as_view())
+    path('<int:id>/', GetClientById.as_view())
 ]

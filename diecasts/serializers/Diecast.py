@@ -31,7 +31,47 @@ class DiecastSerializer(serializers.ModelSerializer):
     class Meta:
         model = Diecast
         fields = "__all__"
-
+        
+        
+    # -------------------------------
+    #      MÉTODOS AUXILIARES
+    # -------------------------------
+        
+    def _resolve_relations(self, validate_data):
+        """
+        Converte nomes enviados em instâncias relacionadas (get_or_create).
+        Usado tanto no create() quanto no update().
+        """
+        
+        relations_fields = {
+            "brand":("brand_name", Diecast_Brand),
+            "name":("model_name", Diecast_Model),
+            "car_brand":("car_brand_name", Car_Brand),
+            "car_model":("car_model_name", Car_model)
+        }
+        
+        relations = {}
+        
+        for field, (input_name, model_class) in relations_fields.items():
+            name = validate_data.pop(input_name, None)
+            if name:
+                relations[field] = get_or_create_instance(model_class, "name", name)
+        return relations
+    
+    
+    def _normalize_input(self, data):
+        """Converte todos os nomes enviados para maiúsculo"""
+        for field in ["brand_name", "model_name", "car_brand_name", "car_model_name"]:
+            data[field] = data[field].upper()
+        
+        return data
+    
+    
+    # -----------------------------
+    #     MÉTODOS PRINCIPAIS
+    #------------------------------
+        
+        
     def create(self, validated_data):
         """
         Cria uma instância de Diecast.
@@ -53,3 +93,5 @@ class DiecastSerializer(serializers.ModelSerializer):
 
         # Cria a miniatura com os relacionamentos resolvidos
         return Diecast.objects.create(**relations, **validated_data)
+    
+    

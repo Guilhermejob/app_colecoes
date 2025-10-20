@@ -4,11 +4,12 @@ from diecasts.serializers.Diecast import DiecastSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from ..filters.diecast_filter import DiecastFilter
 
-
-#---- Versão automatica usando do ModelViewSet para a prototipação rápida
 
 """
+----- Versão automatica usando do ModelViewSet para a prototipação rápida
+
 from rest_framework import viewsets
 
 class DiecastViewSet(viewsets.ModelViewSet):
@@ -19,15 +20,27 @@ class DiecastViewSet(viewsets.ModelViewSet):
 class DiecastApiView(APIView):
     
     """
-    Endpoint para cadastro de uma miniatura diecast
+    Endpoint para listagem e cadastro de miniaturas Diecast.
     """
     
     def get(self, request):
         
-        diecasts = Diecast.objects.all()
-        serializer = DiecastSerializer(diecasts, many=True)
         
-        return Response(serializer.data)
+        if not request.query_params:
+            diecasts = Diecast.objects.all()
+            serializer = DiecastSerializer(diecasts, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        diecast_filter = DiecastFilter(request.query_params, queryset=Diecast.objects.all())
+        
+        if not diecast_filter.qs.exists():
+            return Response(
+                {'message':'Nenhum resultado encontrado para os filtros desejados'}
+            )
+            
+        serializer = DiecastSerializer(diecast_filter.qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
     
     def post(self, request):
         serializer = DiecastSerializer(data=request.data)
@@ -48,10 +61,10 @@ class DiecastApiView(APIView):
         
 class DiecastDetailApiView(APIView):
     
-    def get(self, request, pk):
+    def get(self, request, id):
         
         try:
-            diecast = Diecast.objects.get(pk=pk)
+            diecast = Diecast.objects.get(pk=id)
         except Diecast.DoesNotExist:
             return Response(
                 {"error":"Miniatura não encontrada",},
@@ -61,3 +74,21 @@ class DiecastDetailApiView(APIView):
         serializer = DiecastSerializer(diecast)
         
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def patch(self, request, id):
+        
+        print(f"---------------- {id} ---------------------")
+        try:
+            diecast = Diecast.objects.get(pk = id)
+        except Diecast.DoesNotExist:
+            return Response(
+                {"error":"A miniatura não existe",},
+                status = status.HTTP_404_NOT_FOUND
+            )
+            
+        serializer = DiecastSerializer(diecast, data = request.data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
