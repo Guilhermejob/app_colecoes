@@ -14,6 +14,7 @@ router.register(r'register_car_model', CarModelViewSet, basename='register_car_m
 
 urlpatterns = [
     path('', DiecastApiView.as_view()),
-    path('/<int:id>/',DiecastDetailApiView.as_view())
+    path('<int:id>/',DiecastDetailApiView.as_view()),
+    path('/refatorando/', include(router.urls)),
     
 ]

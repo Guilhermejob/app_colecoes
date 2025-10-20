@@ -168,3 +168,7 @@ CORS_ALLOW_HEADERS = [
     "x-csrftoken",
     "accept",
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS':['django_filters.rest_framework.DjangoFilterBackend']
+}
