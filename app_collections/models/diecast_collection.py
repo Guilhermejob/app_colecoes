@@ -2,6 +2,8 @@ from django.db import models
 from client.models.clients import Client
 from datetime import date
 
+
+
 class DiecastCollection(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
@@ -12,3 +14,4 @@ class DiecastCollection(models.Model):
     
     def __str__(self):
         return f"{self.name} ({self.owner.name})"
+    
