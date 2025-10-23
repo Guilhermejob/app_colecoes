@@ -1,13 +1,7 @@
-from django.urls import path, include
-from rest_framework import routers
-from client.views.client_view_set import ClientViewSet, GetClientById
-
-
-router = routers.DefaultRouter()
-router.register(r'client', ClientViewSet)
-
+from django.urls import path
+from client.views.client_view_set import ClientApiView
 
 urlpatterns = [
-    path('', include(router.urls)),  # todas as rotas do router
-    path('<int:id>/', GetClientById.as_view())
+    path('', ClientApiView.as_view()),         # GET (todos) / POST (criar)
+    path('<int:id>/', ClientApiView.as_view()) # GET, PATCH, DELETE (por ID)
 ]
