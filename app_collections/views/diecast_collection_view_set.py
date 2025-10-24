@@ -7,22 +7,31 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
+
+
+@extend_schema_view(
+    get=extend_schema(responses=CollectionItemSerializer,description="Lista todos os itens de uma coleção ou um item específico."),
+    post=extend_schema(request=CollectionItemSerializer,responses={201: CollectionItemSerializer},description="Adiciona um novo item à coleção especificada."),
+    patch=extend_schema(request=CollectionItemSerializer,responses={200: CollectionItemSerializer},description="Atualiza parcialmente um item da coleção."),
+    delete=extend_schema(responses={204: None},description="Remove um item de uma coleção específica."),
+)
 class DiecastCollectionItemApiView(APIView):
     """
-    Endpoint para gerenciar itens de uma coleção (GET, POST, PATCH, DELETE)
+    Endpoint para gerenciar itens de uma coleçao (GET, POST, PATCH, DELETE)
     """
     
 
     def get(self, request, collection_id, id=None):
         """
-        Retorna todos os itens de uma coleção ou um item específico dentro dela
+        Retorna todos os itens de uma coleçao ou um item específico dentro dela
         """
         if id:
             try:
                 item = DiecastCollectionItem.objects.get(pk=id, collection_id=collection_id)
             except DiecastCollectionItem.DoesNotExist:
-                return Response({"error": "Item não encontrado nessa coleção"}, status=status.HTTP_404_NOT_FOUND)
+                return Response({"error": "Item nao encontrado nessa coleçao"}, status=status.HTTP_404_NOT_FOUND)
 
             serializer = CollectionItemSerializer(item)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -34,16 +43,16 @@ class DiecastCollectionItemApiView(APIView):
 
     def post(self, request, collection_id):
         """
-        Adiciona um novo item à coleção especificada
+        Adiciona um novo item à coleçao especificada
         """
         data = request.data.copy()
-        data["collection"] = collection_id  # garante vínculo da coleção
+        data["collection"] = collection_id  # garante vínculo da coleçao
 
         serializer = CollectionItemSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(
-                {"message": "Item adicionado à coleção com sucesso", "data": serializer.data},
+                {"message": "Item adicionado à coleçao com sucesso", "data": serializer.data},
                 status=status.HTTP_201_CREATED
             )
         return Response(
@@ -53,12 +62,12 @@ class DiecastCollectionItemApiView(APIView):
         
     def patch(self, request, collection_id, id):
         """
-        Atualiza parcialmente um item de uma coleção específica
+        Atualiza parcialmente um item de uma coleçao específica
         """
         try:
             item = DiecastCollectionItem.objects.get(pk=id, collection_id=collection_id)
         except DiecastCollectionItem.DoesNotExist:
-            return Response({"error": "Item não encontrado nessa coleção"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Item nao encontrado nessa coleçao"}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = CollectionItemSerializer(item, data=request.data, partial=True)
         if serializer.is_valid():
@@ -76,15 +85,15 @@ class DiecastCollectionItemApiView(APIView):
 
     def delete(self, request, collection_id, id):
         """
-        Remove um item de uma coleção específica
+        Remove um item de uma coleçao específica
         """
         try:
             item = DiecastCollectionItem.objects.get(pk=id, collection_id=collection_id)
         except DiecastCollectionItem.DoesNotExist:
-            return Response({"error": "Item não encontrado nessa coleção"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Item nao encontrado nessa coleçao"}, status=status.HTTP_404_NOT_FOUND)
 
         item.delete()
-        return Response({"message": "Item removido da coleção com sucesso"}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"message": "Item removido da coleçao com sucesso"}, status=status.HTTP_204_NO_CONTENT)
 
         
 
@@ -95,14 +104,14 @@ class DiecastCollectionApiView(APIView):
 
     def get(self, request, id=None):
         """
-        Retorna todas as coleções ou uma coleção especifica pelo ID
+        Retorna todas as coleções ou uma coleçao especifica pelo ID
         """
         
         if id:
             try:
                 collection = DiecastCollection.objects.get(pk=id)
             except DiecastCollection.DoesNotExist:
-                return Response({"error": "Coleção não encontrada"}, status=status.HTTP_404_NOT_FOUND)
+                return Response({"error": "Coleçao nao encontrada"}, status=status.HTTP_404_NOT_FOUND)
             
             serializer = CollectionSerializer(collection)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -114,7 +123,7 @@ class DiecastCollectionApiView(APIView):
     
     def post(self, request):
         """
-        Cria uma nova coleção
+        Cria uma nova coleçao
         """
         
         serializer = CollectionSerializer(data = request.data)
@@ -122,48 +131,48 @@ class DiecastCollectionApiView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(
-                {"Message":"Coleção criada com sucesso", "data":serializer.data},
+                {"Message":"Coleçao criada com sucesso", "data":serializer.data},
                 status=status.HTTP_201_CREATED
             )
         return Response(
-            {"error":"Erro ao criar coleção", "details":serializer.errors},
+            {"error":"Erro ao criar coleçao", "details":serializer.errors},
             status=status.HTTP_400_BAD_REQUEST    
         )
         
     def patch(self, request, id):
         """
-        Atualiza os dados da coleção
+        Atualiza os dados da coleçao
         """
         
         try:
             collection = DiecastCollection.objects.get(pk = id)
         except DiecastCollection.DoesNotExist:
-            return Response({"Error":"A coleção não foi encontrada"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"Error":"A coleçao nao foi encontrada"}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = CollectionSerializer(collection, data = request.data, partial=True)
         
         if serializer.is_valid():
             serializer.save()
             return Response(
-                {"message":"Coleção atualizada com sucesso", "data": serializer.data},
+                {"message":"Coleçao atualizada com sucesso", "data": serializer.data},
                 status=status.HTTP_200_OK
             )
         
         return Response(
-            {"error":"Erro ao atualizar a coleção", "Details":serializer.errors},
+            {"error":"Erro ao atualizar a coleçao", "Details":serializer.errors},
             status=status.HTTP_400_BAD_REQUEST
         )
         
     def delete(self, request, id):
         """
-        deleta uma coleção
+        deleta uma coleçao
         """
         
         try:
             collection = DiecastCollection.objects.get(pk = id)
         except DiecastCollection.DoesNotExist:
-            return Response({"error":"A coleção nao foi encontrada"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error":"A coleçao nao foi encontrada"}, status=status.HTTP_404_NOT_FOUND)
         
         collection.delete()
         
-        return Response({"message": "Coleção deletada com sucesso"}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"message": "Coleçao deletada com sucesso"}, status=status.HTTP_204_NO_CONTENT)

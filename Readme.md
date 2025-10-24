@@ -13,7 +13,7 @@ Um aplicativo Django para gerenciar coleções de miniaturas, como Hot Wheels, M
 
 ---
 
-## 🛠️ Instalação
+## 🛠️ Instalaço
 
 ### 1. Clonar o Repositório
 

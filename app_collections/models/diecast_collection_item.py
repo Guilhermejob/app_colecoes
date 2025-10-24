@@ -21,6 +21,8 @@ class DiecastCollectionItem(models.Model):
     is_sealed = models.BooleanField(default=False)
     purchase_price = models.DecimalField(max_digits=7, decimal_places=2, default=10.99)
      
+    class Meta:
+        db_table = 'DiecastCollectionItem'
         
     def __str__(self):
         return f"{self.diecast} in {self.collection.name}"

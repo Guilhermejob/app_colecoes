@@ -1,6 +1,8 @@
 from django.db import models
-
-class Client(models.Model):
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from ..managers import ClientManager
+from datetime import date
+class Client(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=100)
     nickname = models.CharField(max_length=50, blank=True, null=True, unique=True)
     email = models.EmailField(unique=True)
@@ -17,6 +19,20 @@ class Client(models.Model):
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    #Campos Obrigatórios para AbstractUser
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    
+    #Definiçao de Login
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name']
+    
+    class Meta:
+        db_table = 'Client'
+    
+    #Manager Personalizad
+    objects = ClientManager()
 
     def __str__(self):
         return f"{self.name} ({self.nickname or self.email})"

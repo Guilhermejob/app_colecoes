@@ -1,15 +1,21 @@
-from diecasts.models.Car_model import Car_model
+from diecasts.models.Car_model import Carmodel
 from diecasts.serializers.car_model import CarModelSerializer
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-    
+from drf_spectacular.utils import extend_schema, extend_schema_view
+
+@extend_schema_view(
+    get=extend_schema(responses=CarModelSerializer, description="Lista todas as miniaturas."),
+    post=extend_schema(request=CarModelSerializer, responses=CarModelSerializer, description="Cria uma nova miniatura."),
+)
+   
 class CarModelViewSet(APIView):
     
     def get(self, request):
         
-        diecasts = Car_model.objects.all()
+        diecasts = Carmodel.objects.all()
         serializer = CarModelSerializer(diecasts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     

@@ -6,6 +6,7 @@ from diecasts.views.diecast import DiecastApiView, DiecastDetailApiView
 from diecasts.views.car_model import CarModelViewSet 
 
 
+
 urlpatterns = [
     path('', DiecastApiView.as_view()),
     path('<int:id>/',DiecastDetailApiView.as_view()),
@@ -13,4 +14,5 @@ urlpatterns = [
     path('brand/', DiecastBrandViewSet.as_view()),
     path('car_model/', CarModelViewSet.as_view()),
     path('car_brand/', CarBrandViewSet.as_view()),  
+
 ]

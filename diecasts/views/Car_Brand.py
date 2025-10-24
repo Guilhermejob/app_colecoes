@@ -6,6 +6,12 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
+from drf_spectacular.utils import extend_schema, extend_schema_view
+
+@extend_schema_view(
+    get=extend_schema(responses=CarBrandSerializer, description="Lista todas as miniaturas."),
+    post=extend_schema(request=CarBrandSerializer, responses=CarBrandSerializer, description="Cria uma nova miniatura."),
+)
 class CarBrandViewSet(APIView):
     
     def get(self, request):
