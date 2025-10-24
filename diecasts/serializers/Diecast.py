@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from diecasts.models import (
     Diecast,
-    Car_Brand,
-    Diecast_Brand,
-    Car_model,
-    Diecast_Model,
+    CarBrand,
+    DiecastBrand,
+    Carmodel,
+    DiecastModel,
 )
 from diecasts.utils import get_or_create_instance
 
@@ -16,7 +16,7 @@ class DiecastSerializer(serializers.ModelSerializer):
     - Retorna os nomes relacionados no GET em vez de IDs.
     """
 
-    # Campos de escrita (para criação via nome)
+    # Campos de escrita (para criaçao via nome)
     brand_name = serializers.CharField(write_only=True, help_text="Nome da marca da miniatura (Diecast Brand)")
     model_name = serializers.CharField(write_only=True, help_text="Nome do modelo da miniatura (Diecast Model)")
     car_brand_name = serializers.CharField(write_only=True, help_text="Nome da marca do carro real")
@@ -44,10 +44,10 @@ class DiecastSerializer(serializers.ModelSerializer):
         """
         
         relations_fields = {
-            "brand":("brand_name", Diecast_Brand),
-            "name":("model_name", Diecast_Model),
-            "car_brand":("car_brand_name", Car_Brand),
-            "car_model":("car_model_name", Car_model)
+            "brand":("brand_name", DiecastBrand),
+            "name":("model_name", DiecastModel),
+            "car_brand":("car_brand_name", CarBrand),
+            "car_model":("car_model_name", Carmodel)
         }
         
         relations = {}
@@ -85,10 +85,10 @@ class DiecastSerializer(serializers.ModelSerializer):
 
         # Resolve ou cria as relações
         relations = {
-            "brand": get_or_create_instance(Diecast_Brand, "name", brand_name),
-            "name": get_or_create_instance(Diecast_Model, "name", model_name),
-            "car_brand": get_or_create_instance(Car_Brand, "name", car_brand_name),
-            "car_model": get_or_create_instance(Car_model, "name", car_model_name),
+            "brand": get_or_create_instance(DiecastBrand, "name", brand_name),
+            "name": get_or_create_instance(DiecastModel, "name", model_name),
+            "car_brand": get_or_create_instance(CarBrand, "name", car_brand_name),
+            "car_model": get_or_create_instance(Carmodel, "name", car_model_name),
         }
 
         # Cria a miniatura com os relacionamentos resolvidos

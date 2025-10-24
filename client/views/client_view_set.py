@@ -1,12 +1,18 @@
 from rest_framework import viewsets
 from client.models.clients import Client
 from client.serializers.client_serializer import ClientSerializer
-from rest_framework.views import APIView, Request, Response
+from rest_framework.views import APIView, Response
 from rest_framework import status
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 
 
-
+@extend_schema_view(
+    get=extend_schema(responses=ClientSerializer, description="Lista todas as miniaturas."),
+    post=extend_schema(request=ClientSerializer, responses=ClientSerializer, description="Cria uma nova miniatura."),
+    patch=extend_schema(request=ClientSerializer, responses=ClientSerializer, description="Atualiza parcialmente."),
+    delete=extend_schema(responses={204: None}, description="Deleta uma miniatura."),
+)
 class ClientApiView(APIView):
     """
     Endpoint responsavel pelo Crud de colecionadores(Client)
@@ -20,7 +26,7 @@ class ClientApiView(APIView):
             try:
                 client = Client.objects.get(pk = id)
             except Client.DoesNotExist:
-                return Response({'error':'O colecionador não existe'}, status=status.HTTP_404_NOT_FOUND)
+                return Response({'error':'O colecionador nao existe'}, status=status.HTTP_404_NOT_FOUND)
             serializer = ClientSerializer(client)
             return Response(serializer.data, status=status.HTTP_200_OK)
         
@@ -53,7 +59,7 @@ class ClientApiView(APIView):
         try:
             client = Client.objects.get(pk = id)
         except Client.DoesNotExist:
-            return Response({'error': 'O colecionador não existe'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'O colecionador nao existe'}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = ClientSerializer(client, data=request.data, partial = True)
         if serializer.is_valid():
@@ -75,7 +81,7 @@ class ClientApiView(APIView):
         try:
             client = Client.objects.get(pk=id)
         except Client.DoesNotExist:
-            return Response({'error': 'O colecionador não existe'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'O colecionador nao existe'}, status=status.HTTP_404_NOT_FOUND)
 
         client.delete()
         return Response({"message": "Colecionador removido com sucesso"}, status=status.HTTP_204_NO_CONTENT)

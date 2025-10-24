@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from diecasts.models.Car_Brand import Car_Brand
+from diecasts.models.Car_Brand import CarBrand
 
 
 class CarBrandSerializer(serializers.ModelSerializer):
     
     class Meta:
-            model = Car_Brand
+            model = CarBrand
             fields = '__all__'
     
      

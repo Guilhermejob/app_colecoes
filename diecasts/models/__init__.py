@@ -1,13 +1,13 @@
-from .Car_Brand import Car_Brand
+from .Car_Brand import CarBrand
 from .Diecast import Diecast
-from .Diecast_Model import Diecast_Model
-from .Car_model import Car_model
-from .Diecast_Brand import Diecast_Brand
+from .Diecast_Model import DiecastModel
+from .Car_model import Carmodel
+from .Diecast_Brand import DiecastBrand
 
 __all__ = [
-    'Car_Brand',
+    'CarBrand',
     'Diecast',
-    'Diecast_Model',
-    'Car_model',
-    'Diecast_Brand',
+    'DiecastModel',
+    'Carmodel',
+    'DiecastBrand',
 ]

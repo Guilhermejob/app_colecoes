@@ -12,6 +12,9 @@ class DiecastCollection(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     beginning_date = models.DateField(default=date.today)
     
+    class Meta:
+        db_table = 'DiecastCollection'
+    
     def __str__(self):
         return f"{self.name} ({self.owner.name})"
     

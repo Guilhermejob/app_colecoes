@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from diecasts.models.Diecast_Model import Diecast_Model
+from diecasts.models.Diecast_Model import DiecastModel
 
 
 class DiecastModelSerializer(serializers.ModelSerializer):
     
     class Meta:
-            model = Diecast_Model
+            model = DiecastModel
             fields = '__all__'

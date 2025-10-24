@@ -1,15 +1,22 @@
-from diecasts.models.Diecast_Brand import Diecast_Brand
+from diecasts.models.Diecast_Brand import DiecastBrand
 from diecasts.serializers.diecast_brand import DiecastBrandSerializer
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+from drf_spectacular.utils import extend_schema, extend_schema_view
+
+@extend_schema_view(
+    get=extend_schema(responses=DiecastBrandSerializer, description="Lista todas as miniaturas."),
+    post=extend_schema(request=DiecastBrandSerializer, responses=DiecastBrandSerializer, description="Cria uma nova miniatura."),
+)
+
 class DiecastBrandViewSet(APIView):
     
     def get(self, request):
         
-        diecasts = Diecast_Brand.objects.all()
+        diecasts = DiecastBrand.objects.all()
         serializer = DiecastBrandSerializer(diecasts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     

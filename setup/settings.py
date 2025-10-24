@@ -20,9 +20,6 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -48,11 +45,16 @@ INSTALLED_APPS = [
     'rest_framework',
     "corsheaders",
     
+    'drf_spectacular',
+    'drf_spectacular_sidecar', 
+    
     'app_collections',
     'client',
     'diecasts',
        
 ]
+
+AUTH_USER_MODEL = 'client.Client'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -170,5 +172,15 @@ CORS_ALLOW_HEADERS = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS':['django_filters.rest_framework.DjangoFilterBackend']
+    'DEFAULT_FILTER_BACKENDS':['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'API Gerenciador de Coleções',
+    'DESCRIPTION': 'Documentação da API do Gerenciador de Miniaturas 1:64',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
+
+
