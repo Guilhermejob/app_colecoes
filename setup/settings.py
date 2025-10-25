@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 load_dotenv()
 
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "rest_framework_simplejwt.token_blacklist",
 
     'rest_framework',
     "corsheaders",
@@ -174,6 +176,9 @@ CORS_ALLOW_HEADERS = [
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS':['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
 
 SPECTACULAR_SETTINGS = {
@@ -182,5 +187,17 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }
+
+SIMPLE_JWT = {
+    'ACESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME':timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+}
+
+AUTHENTICATION_BACKENDS = [
+    'client.auth_backends.EmailOrNicknameBackend',
+]
 
 

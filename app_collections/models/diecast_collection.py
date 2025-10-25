@@ -8,6 +8,7 @@ class DiecastCollection(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     owner = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='collections')
+    is_public = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     beginning_date = models.DateField(default=date.today)

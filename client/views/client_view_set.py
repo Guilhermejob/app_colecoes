@@ -34,24 +34,6 @@ class ClientApiView(APIView):
         serializer = ClientSerializer(clients, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def post(self, request):
-        """
-        Cadastro de cliente
-        """
-        serializer = ClientSerializer(data = request.data)
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                {'massege':'Colecionador cadastrado com sucesso', 'data':serializer.data},
-                status=status.HTTP_201_CREATED
-            )
-            
-        return Response(
-            {'error':'Erro ao cadastrar o colecionador', 'detais':serializer.errors},
-            status=status.HTTP_400_BAD_REQUEST
-        )
-        
     def patch(self, request, id):
         """
         atualiza os dados de um colecionador

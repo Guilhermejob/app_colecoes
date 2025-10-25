@@ -1,6 +1,7 @@
 from django.db import models
 from diecasts.models.Diecast import Diecast
 from .diecast_collection import DiecastCollection
+from client.models import Client
 
 class DiecastCollectionItem(models.Model):
     
@@ -15,7 +16,7 @@ class DiecastCollectionItem(models.Model):
     ]
     
     collection = models.ForeignKey(DiecastCollection, on_delete=models.CASCADE, related_name='items')
-    diecasts = models.ForeignKey(Diecast, on_delete=models.CASCADE, related_name='collection_items')
+    diecast = models.ForeignKey(Diecast, on_delete=models.CASCADE, related_name='collection_items')
     created_at = models.DateTimeField(auto_now_add=True)
     condition = models.CharField(max_length=30, choices=CONDITIONS_CHOICES, default='NM')
     is_sealed = models.BooleanField(default=False)

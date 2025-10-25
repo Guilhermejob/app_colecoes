@@ -3,12 +3,12 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from ..managers import ClientManager
 from datetime import date
 class Client(AbstractBaseUser, PermissionsMixin):
-    name = models.CharField(max_length=100)
-    nickname = models.CharField(max_length=50, blank=True, null=True, unique=True)
+    name = models.CharField(max_length=100, null=False, blank=False)
+    nickname = models.CharField(max_length=50, null=False, blank=False, unique=True)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=15, blank=True, null=True, unique=True)
     age = models.IntegerField(blank=True, null=True)
-    cpf = models.CharField(max_length=14, unique=True)  # Formato: 000.000.000-00
+    cpf = models.CharField(max_length=14, unique=True, blank=False, null=False)  # Formato: 000.000.000-00
     zip_code = models.CharField(max_length=10, blank=True, null=True)
     country = models.CharField(max_length=50, blank=True, null=True)
     state = models.CharField(max_length=50, blank=True, null=True)
@@ -26,7 +26,7 @@ class Client(AbstractBaseUser, PermissionsMixin):
     
     #Definiçao de Login
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    REQUIRED_FIELDS = ['nickname', 'name', 'cpf']
     
     class Meta:
         db_table = 'Client'
